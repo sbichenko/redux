@@ -1,12 +1,10 @@
 # Async Flow
 
-Without [middleware](Middleware.md), Redux store only supports [synchronous data flow](../basics/DataFlow.md). This is what you get by default with [`createStore()`](../api/createStore.md).
+In Redux, asynchronous data flow can be implemented without [middleware](Middleware.md). However, it is more convenient to use middleware such as [redux-thunk](https://github.com/gaearon/redux-thunk), [redux-promise](https://github.com/acdlite/redux-promise) or [redux-saga](https://github.com/yelouafi/redux-saga). Such middleware allows you to treat [asynchronous action creators](AsyncActions.md) just like regular action creators.
 
-You may enhance [`createStore()`](../api/createStore.md) with [`applyMiddleware()`](../api/applyMiddleware.md). It is not required, but it lets you [express asynchronous actions in a convenient way](AsyncActions.md).
+Such middleware usually wraps the store’s [`dispatch()`](../api/Store.md#dispatch) method and allows you to `dispatch` something other than actions—for example, functions or Promises. For example, with a Promise middleware you can dispatch Promises, and the middleware will asynchronously dispatch a pair of begin/end actions in response to each Promise.
 
-Asynchronous middleware like [redux-thunk](https://github.com/gaearon/redux-thunk) or [redux-promise](https://github.com/acdlite/redux-promise) wraps the store’s [`dispatch()`](../api/Store.md#dispatch) method and allows you to dispatch something other than actions, for example, functions or Promises. Any middleware you use can then interpret anything you dispatch, and in turn, can pass actions to the next middleware in chain. For example, a Promise middleware can intercept Promises and dispatch a pair of begin/end actions asynchronously in response to each Promise.
-
-When the last middleware in the chain dispatches an action, it has to be a plain object. This is when the [synchronous Redux data flow](../basics/DataFlow.md) takes place.
+When the last middleware in the chain dispatches an action, it has to be a proper [Redux action](http://rackt.org/redux/docs/basics/Actions.html). This action will be passed to the reducer as a part of [synchronous Redux data flow](../basics/DataFlow.md).
 
 Check out [the full source code for the async example](ExampleRedditAPI.md).
 

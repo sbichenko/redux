@@ -1,8 +1,10 @@
 # Async Flow
 
-In Redux, asynchronous data flow can be implemented without [middleware](Middleware.md). However, it is more convenient to use middleware such as [redux-thunk](https://github.com/gaearon/redux-thunk), [redux-promise](https://github.com/acdlite/redux-promise) or [redux-saga](https://github.com/yelouafi/redux-saga). Such middleware allows you to treat [asynchronous action creators](AsyncActions.md) just like regular action creators. This way, *you won't have to discriminate between asynchronous and synchronous data flow within your application logic.*
+Redux supports asynchronous data flow out of the box. However, many users prefer to use [middleware](Middleware.md) such as [redux-thunk](https://github.com/gaearon/redux-thunk), [redux-promise](https://github.com/acdlite/redux-promise) or [redux-saga](https://github.com/yelouafi/redux-saga). Such middleware allows you to treat [asynchronous action creators](AsyncActions.md) just like regular action creators. This way, *you won't have to discriminate between asynchronous and synchronous data flows within your application logic.*
 
-Such middleware usually wraps the store’s [`dispatch()`](../api/Store.md#dispatch) method and allows you to `dispatch` something other than actions—for example, functions or Promises. For example, with a Promise middleware you can dispatch Promises, and the middleware will asynchronously dispatch a pair of begin/end actions in response to each Promise.
+Such middleware usually wraps the store’s [`dispatch()`](../api/Store.md#dispatch) method and allows you to dispatch something other than actions—for example, functions or Promises. It then dispatches the actual action which it extracts from the passed value.
+
+For example, [redux-thunk](https://github.com/gaearon/redux-thunk) middleware allows you to `dispatch` a function. It calls that function and passes Store's `dispatch` and `getState` methods as arguments. This way, you can do asynchronous stuff inside that function and dispatch synchronous actions when necessary. 
 
 When the last middleware in the chain dispatches an action, it has to be a proper [Redux action](http://rackt.org/redux/docs/basics/Actions.html). This action will be passed to the reducer as a part of [synchronous Redux data flow](../basics/DataFlow.md).
 
